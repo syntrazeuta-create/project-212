@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>212 — Pyrenees Record Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --black: #080808;
+    --white: #F5F0EB;
+    --pink: #FF2060;
+    --pink-dim: #cc1a4e;
+    --gray: #1a1a1a;
+    --gray-mid: #2e2e2e;
+    --text-muted: #888;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--pink);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--pink);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.18s ease;
+    opacity: 0.6;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--pink); }
+
+  /* ========== NAV ========== */
+  nav {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.4rem 3rem;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(255,32,96,0.08);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--pink); }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .cart-btn {
+    background: none; border: 1px solid var(--pink);
+    color: var(--pink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.2rem;
+    cursor: none;
+    display: flex; align-items: center; gap: 0.6rem;
+    transition: background 0.2s, color 0.2s;
+    position: relative;
+  }
+  .cart-btn:hover { background: var(--pink); color: var(--black); }
+  .cart-count {
+    background: var(--pink);
+    color: var(--black);
+    font-size: 0.6rem;
+    font-weight: 700;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, color 0.2s;
+  }
+  .cart-btn:hover .cart-count { background: var(--black); color: var(--pink); }
+
+  /* ========== HERO ========== */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-number {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(220px, 32vw, 460px);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,32,96,0.12);
+    letter-spacing: -0.04em;
+    pointer-events: none;
+    white-space: nowrap;
+    animation: breathe 6s ease-in-out infinite;
+    user-select: none;
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.015); }
+  }
+
+  .mountain-svg {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%;
+    opacity: 0.25;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 1rem;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 180px);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    animation: fadeUp 1s ease 0.4s both;
+  }
+  .hero-title .line-pink { color: var(--pink); }
+  .hero-title .line-italic {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(50px, 8vw, 130px);
+    color: var(--white);
+    opacity: 0.55;
+  }
+
+  .hero-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 2.5rem;
+    animation: fadeUp 1s ease 0.6s both;
+  }
+  .hero-desc {
+    max-width: 400px;
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+  }
+  .hero-stats {
+    display: flex; gap: 3rem;
+    text-align: right;
+  }
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    display: block;
+  }
+  .stat-val span { color: var(--pink); }
+  .stat-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .scroll-line {
+    position: absolute;
+    bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted);
+    animation: fadeUp 1s ease 0.8s both;
+  }
+  .scroll-line::after {
+    content: '';
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--pink), transparent);
+    animation: lineGrow 1.5s ease 1s infinite;
+  }
+  @keyframes lineGrow {
+    0% { transform: scaleY(0); opacity: 0; transform-origin: top; }
+    50% { transform: scaleY(1); opacity: 1; }
+    100% { transform: scaleY(0); opacity: 0; transform-origin: bottom; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========== MARQUEE ========== */
+  .marquee-wrap {
+    border-top: 1px solid var(--gray-mid);
+    border-bottom: 1px solid var(--gray-mid);
+    overflow: hidden;
+    padding: 1rem 0;
+    background: var(--gray);
+  }
+  .marquee-track {
+    display: flex; gap: 3rem;
+    animation: marquee 18s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+    display: flex; align-items: center; gap: 3rem;
+  }
+  .marquee-dot { color: var(--pink); font-size: 0.5rem; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ========== SECTIONS ========== */
+  section { padding: 7rem 3rem; }
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--pink);
+  }
+
+  /* ========== PROJET ========== */
+  .projet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .projet-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(54px, 7vw, 100px);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+  }
+  .projet-heading em {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--pink);
+    font-size: 0.75em;
+    display: block;
+  }
+  .projet-body {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: rgba(245,240,235,0.65);
+    margin-bottom: 2.5rem;
+  }
+  .data-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 2rem;
+  }
+  .data-item { border-left: 2px solid var(--pink); padding-left: 1rem; }
+  .data-item .val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    display: block;
+  }
+  .data-item .key {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* Progress */
+  .progress-block { margin-top: 3rem; }
+  .progress-header {
+    display: flex; justify-content: space-between;
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 0.75rem;
+  }
+  .progress-bar {
+    height: 2px; background: var(--gray-mid);
+    position: relative; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pink), #ff6090);
+    width: 0%;
+    transition: width 1.5s cubic-bezier(0.16,1,0.3,1);
+    box-shadow: 0 0 12px rgba(255,32,96,0.6);
+  }
+
+  /* ========== SHOP ========== */
+  .shop { background: var(--gray); }
+  .shop-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .shop-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 8vw, 110px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+  }
+  .shop-title span { color: var(--pink); }
+  .shop-tagline {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    max-width: 250px;
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+  }
+
+  .product-card {
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: transform 0.3s ease;
+  }
+  .product-card:hover { transform: scale(1.01); z-index: 2; }
+
+  .product-visual {
+    aspect-ratio: 1 / 1;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: var(--black);
+  }
+  .product-visual svg {
+    width: 55%; height: 55%;
+    transition: transform 0.4s ease;
+  }
+  .product-card:hover .product-visual svg { transform: scale(1.08); }
+
+  .product-hover-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255,32,96,0.07) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .product-card:hover .product-hover-bg { opacity: 1; }
+
+  .product-info {
+    padding: 1.4rem 1.6rem 1.8rem;
+    border-top: 1px solid var(--gray-mid);
+  }
+  .product-cat {
+    font-size: 0.58rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 0.4rem;
+  }
+  .product-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.3rem;
+  }
+  .product-desc {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.1rem;
+  }
+  .product-footer {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .product-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+  .add-to-cart {
+    background: none;
+    border: 1px solid var(--pink);
+    color: var(--pink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    cursor: none;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+  }
+  .add-to-cart:hover { background: var(--pink); color: var(--black); }
+  .add-to-cart:active { transform: scale(0.95); }
+  .add-to-cart.added {
+    background: var(--pink);
+    color: var(--black);
+  }
+
+  /* ========== MANIFESTE ========== */
+  .manifeste {
+    text-align: center;
+    padding: 9rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .manifeste::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255,32,96,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .manifeste-quote {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(28px, 4vw, 58px);
+    line-height: 1.25;
+    color: var(--white);
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    position: relative;
+  }
+  .manifeste-quote .quote-mark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8rem;
+    color: var(--pink);
+    line-height: 0.5;
+    display: block;
+    opacity: 0.35;
+    margin-bottom: 1rem;
+  }
+  .manifeste-author {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ========== JOURNAL ========== */
+  .journal-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+  .journal-card {
+    background: var(--gray);
+    padding: 2.5rem;
+    position: relative;
+  }
+  .journal-date {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    color: var(--pink);
+    margin-bottom: 1rem;
+  }
+  .journal-title {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+  }
+  .journal-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+  .journal-num {
+    position: absolute; top: 2.5rem; right: 2.5rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,32,96,0.2);
+    letter-spacing: 0.05em;
+  }
+
+  /* ========== FOOTER ========== */
+  footer {
+    border-top: 1px solid var(--gray-mid);
+    padding: 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 0.1em;
+    color: var(--white);
+  }
+  .footer-logo span { color: var(--pink); }
+  .footer-copy {
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-align: center;
+  }
+  .footer-socials {
+    display: flex; gap: 1.5rem;
+    list-style: none;
+  }
+  .footer-socials a {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-socials a:hover { color: var(--pink); }
+
+  /* ========== CART PANEL ========== */
+  .cart-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    backdrop-filter: blur(4px);
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+  .cart-panel {
+    position: fixed;
+    top: 0; right: 0;
+    width: 420px; height: 100vh;
+    background: var(--black);
+    border-left: 1px solid var(--gray-mid);
+    z-index: 2001;
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+  }
+  .cart-panel.open { transform: translateX(0); }
+
+  .cart-head {
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 1px solid var(--gray-mid);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-head-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.12em;
+  }
+  .cart-head-title span { color: var(--pink); }
+  .close-cart {
+    background: none; border: none; color: var(--white);
+    font-size: 1.4rem; cursor: none;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--gray-mid);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .close-cart:hover { border-color: var(--pink); color: var(--pink); }
+
+  .cart-body {
+    flex: 1; overflow-y: auto;
+    padding: 1.5rem 2rem;
+  }
+  .cart-body::-webkit-scrollbar { width: 2px; }
+  .cart-body::-webkit-scrollbar-thumb { background: var(--pink); }
+
+  .cart-empty {
+    height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 1rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+  .cart-empty-icon {
+    width: 64px; height: 64px;
+    border: 1px solid var(--gray-mid);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+  .cart-empty p {
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .cart-item {
+    display: flex; gap: 1.2rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--gray-mid);
+    align-items: center;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .cart-item-img {
+    width: 70px; height: 70px;
+    background: var(--gray);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .cart-item-img svg { width: 45px; height: 45px; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.2rem;
+  }
+  .cart-item-cat {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 0.5rem;
+  }
+  .cart-item-controls {
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .qty-btn {
+    background: var(--gray-mid); border: none;
+    color: var(--white); width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none; font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .qty-btn:hover { background: var(--pink); color: var(--black); }
+  .qty-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem; min-width: 24px; text-align: center;
+  }
+  .cart-item-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: var(--white);
+    letter-spacing: 0.06em;
+    text-align: right;
+  }
+  .cart-item-remove {
+    background: none; border: none; color: var(--text-muted);
+    cursor: none; font-size: 0.7rem; display: block;
+    text-align: right; margin-top: 0.3rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .cart-item-remove:hover { color: var(--pink); }
+
+  .cart-foot {
+    padding: 1.5rem 2rem 2.5rem;
+    border-top: 1px solid var(--gray-mid);
+  }
+  .cart-subtotal {
+    display: flex; justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+  .cart-subtotal-label {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .cart-subtotal-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+  .cart-subtotal-val span { font-size: 1rem; color: var(--text-muted); }
+  .cart-shipping {
+    font-size: 0.65rem; color: var(--text-muted);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .cart-cta {
+    display: block; width: 100%;
+    background: var(--pink);
+    color: var(--black);
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    padding: 1.1rem;
+    cursor: none;
+    transition: background 0.2s, transform 0.1s;
+    position: relative; overflow: hidden;
+  }
+  .cart-cta::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .cart-cta:hover::after { transform: translateX(0); }
+  .cart-cta:active { transform: scale(0.98); }
+  .cart-note {
+    font-size: 0.6rem;
+    text-align: center;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 1rem;
+  }
+  .cart-note span { color: var(--pink); }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    .hero { padding: 0 1.5rem 3rem; }
+    .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
+    .hero-stats { align-self: flex-end; gap: 2rem; }
+    .projet-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .journal-grid { grid-template-columns: 1fr; }
+    .shop-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .shop-tagline { text-align: left; }
+    footer { flex-direction: column; gap: 2rem; text-align: center; }
+    .cart-panel { width: 100%; }
+  }
+  @media (max-width: 540px) {
+    .products-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ===== CART OVERLAY ===== -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<!-- ===== CART PANEL ===== -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-head">
+    <div class="cart-head-title">MON PANIER <span id="cartHeadCount"></span></div>
+    <button class="close-cart" onclick="closeCart()">X</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+      </div>
+      <p>Panier vide</p>
+      <p style="font-size:0.65rem;opacity:0.5;">Ajoute un produit pour commencer</p>
+    </div>
+    <div id="cartItems"></div>
+  </div>
+  <div class="cart-foot">
+    <div class="cart-subtotal">
+      <span class="cart-subtotal-label">Total</span>
+      <span class="cart-subtotal-val"><span>EUR </span><span id="cartTotal">0.00</span></span>
+    </div>
+    <p class="cart-shipping">Livraison offerte a partir de 60 EUR</p>
+    <button class="cart-cta">FINALISER LA COMMANDE</button>
+    <p class="cart-note">Financement du projet <span>212 sommets</span></p>
+  </div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <a href="#" class="nav-logo">2<span>1</span>2</a>
+  <ul class="nav-links">
+    <li><a href="#projet">Le Projet</a></li>
+    <li><a href="#shop">Boutique</a></li>
+    <li><a href="#journal">Journal</a></li>
+  </ul>
+  <button class="cart-btn" onclick="openCart()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+    </svg>
+    Panier
+    <span class="cart-count" id="navCartCount">0</span>
+  </button>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg-number">212</div>
+
+  <svg class="mountain-svg" viewBox="0 0 1440 220" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 220 L80 160 L140 190 L200 100 L260 130 L320 60 L380 100 L440 40 L500 80 L560 20 L620 70 L680 10 L740 55 L800 30 L860 80 L920 50 L980 90 L1040 45 L1100 110 L1160 70 L1220 130 L1280 90 L1360 150 L1440 120 L1440 220 Z" fill="rgba(255,32,96,0.18)"/>
+    <path d="M0 220 L100 175 L180 195 L240 140 L310 165 L370 110 L440 145 L510 90 L570 115 L640 60 L700 95 L760 45 L820 75 L880 110 L940 85 L1000 125 L1060 100 L1120 145 L1200 110 L1280 155 L1360 130 L1440 165 L1440 220 Z" fill="rgba(255,32,96,0.08)"/>
+  </svg>
+
+  <div class="hero-eyebrow">Record en cours — Pyrenees 2025</div>
+  <h1 class="hero-title">
+    <div class="line-pink">212</div>
+    <div>SOMMETS</div>
+    <div class="line-italic">en un seul trace</div>
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      Ouvrir une route enchainent les 212 sommets de plus de 3000 metres des Pyrenees. Un record. Une aventure documentee. Un voyage sans compromis.
+    </p>
+    <div class="hero-stats">
+      <div>
+        <span class="stat-val">3<span>K+</span></span>
+        <span class="stat-label">metres min.</span>
+      </div>
+      <div>
+        <span class="stat-val">212</span>
+        <span class="stat-label">sommets</span>
+      </div>
+      <div>
+        <span class="stat-val">~<span>60j</span></span>
+        <span class="stat-label">en autonomie</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-line">scroll</div>
+</section>
+
+<!-- ===== MARQUEE ===== -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack">
+    <span class="marquee-item">212 SOMMETS <span class="marquee-dot">&#9632;</span></span>
+    <span class="marquee-item">PYRENEES RECORD <span class="marquee-dot">&#9632;</span></span>
+    <span class="marquee-item">3000M+ <span class="marquee-dot">&#9632;</span></span>
+    <span class="marquee-item">EXPEDITION 2025 <span class="marquee-dot">&#9632;</span></span>
+    <span class="marquee-item">FINANCEMENT PARTICIPATIF <span class="marquee-dot">&#9632;</span></span>
+    <span class="marquee-item">AVENTURE DOCUMENTEE <span class="marquee-dot">&#9632;</span></span>
+    <span class="marquee-item">212 SOMMETS <span class="marquee-dot">&#9632;</span></span>
+    <span class="marquee-item">PYRENEES RECORD <span class="marquee-dot">&#9632;</span></span>
+    <span class="marquee-item">3000M+ <span class="marquee-dot">&#9632;</span></span>
+    <span class="marquee-item">EXPEDITION 2025 <span class="marquee-dot">&#9632;</span></span>
+    <span class="marquee-item">FINANCEMENT PARTICIPATIF <span class="marquee-dot">&#9632;</span></span>
+    <span class="marquee-item">AVENTURE DOCUMENTEE <span class="marquee-dot">&#9632;</span></span>
+  </div>
+</div>
+
+<!-- ===== PROJET ===== -->
+<section id="projet">
+  <div class="projet-grid">
+    <div>
+      <div class="section-label">Le Projet</div>
+      <h2 class="projet-heading">
+        L'IMPOSSIBLE<br>
+        <em>devient route</em>
+      </h2>
+    </div>
+    <div>
+      <p class="projet-body">
+        Aucune route n'existe. Aucun record n'a ete etabli. L'objectif est de relier les 212 sommets pyreneens depassant 3000 metres d'altitude en un seul et meme trace continu — en autonomie totale, sans assistance externe, en documentant chaque etape de l'expedition.
+      </p>
+      <p class="projet-body">
+        Ce projet est finance par la vente de merchandising. Chaque piece achetee contribue directement au financement de l'expedition : materiel, ravitaillement, production documentaire.
+      </p>
+      <div class="data-grid">
+        <div class="data-item">
+          <span class="val">212</span>
+          <span class="key">Sommets 3000m+</span>
+        </div>
+        <div class="data-item">
+          <span class="val">~800km</span>
+          <span class="key">Lineaire estime</span>
+        </div>
+        <div class="data-item">
+          <span class="val">+90 000m</span>
+          <span class="key">Denivele positif</span>
+        </div>
+        <div class="data-item">
+          <span class="val">Inédit</span>
+          <span class="key">Aucun precedent</span>
+        </div>
+      </div>
+      <div class="progress-block">
+        <div class="progress-header">
+          <span>Financement</span>
+          <span id="progPct">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SHOP ===== -->
+<section class="shop" id="shop">
+  <div class="shop-header">
+    <div>
+      <div class="section-label">Boutique</div>
+      <h2 class="shop-title">MERCH<br><span>212</span></h2>
+    </div>
+    <p class="shop-tagline">Chaque achat finance directement l'expedition. Edition limitee.</p>
+  </div>
+
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- ===== MANIFESTE ===== -->
+<section class="manifeste">
+  <div class="manifeste-quote">
+    <span class="quote-mark">"</span>
+    Il n'existe pas de chemin vers le sommet. Le chemin, c'est ce qu'on laisse derriere soi.
+  </div>
+  <p class="manifeste-author">Manifeste — Projet 212 Sommets</p>
+</section>
+
+<!-- ===== JOURNAL ===== -->
+<section id="journal" style="background:var(--gray);">
+  <div class="section-label">Journal de bord</div>
+  <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,6vw,88px);letter-spacing:0.02em;margin-bottom:3rem;">CARNETS DE TERRAIN</h2>
+  <div class="journal-grid">
+    <div class="journal-card">
+      <div class="journal-num">01</div>
+      <div class="journal-date">12 MARS 2025 — J-90</div>
+      <h3 class="journal-title">Debut de la preparation logistique</h3>
+      <p class="journal-text">Premiere cartographie complete des 212 sommets. Identification des couloirs, des zones d'autonomie critique et des points de ravitaillement possibles. La route prend forme sur le papier.</p>
+    </div>
+    <div class="journal-card">
+      <div class="journal-num">02</div>
+      <div class="journal-date">28 MARS 2025 — J-74</div>
+      <h3 class="journal-title">Test d'autonomie — Massif du Maladeta</h3>
+      <p class="journal-text">5 jours en conditions reelles. Charge maximale : 18kg. Bilan positif sur la gestion energetique. Ajustements sur le systeme d'hydratation. Le corps repond a l'appel.</p>
+    </div>
+    <div class="journal-card">
+      <div class="journal-num">03</div>
+      <div class="journal-date">10 AVRIL 2025 — J-62</div>
+      <h3 class="journal-title">La route prend vie</h3>
+      <p class="journal-text">Validation du trace definitif. 212 points GPS charges. La ligne rouge sur la carte represente plus qu'un itineraire — c'est une declaration d'intention. Le depart est fixe.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-logo">2<span>1</span>2</div>
+  <div class="footer-copy">
+    <p>Projet 212 Sommets &mdash; Pyrenees Record</p>
+    <p style="margin-top:0.3rem;font-size:0.6rem;">Tous droits reserves &mdash; 2025</p>
+  </div>
+  <ul class="footer-socials">
+    <li><a href="#">Instagram</a></li>
+    <li><a href="#">YouTube</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  // ===== CURSOR =====
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      cursorRing.style.left = e.clientX + 'px';
+      cursorRing.style.top = e.clientY + 'px';
+    }, 60);
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursorRing.style.width = '54px';
+      cursorRing.style.height = '54px';
+      cursor.style.transform = 'translate(-50%,-50%) scale(1.8)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursorRing.style.width = '36px';
+      cursorRing.style.height = '36px';
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    });
+  });
+
+  // ===== PRODUCTS =====
+  const products = [
+    {
+      id: 1, name: 'T-SHIRT 212', cat: 'Vetement', price: 35,
+      desc: 'Coton bio 180g. Impression serigraphiee. Logo 212 dos.',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M30 20 L10 35 L20 45 L25 40 L25 80 L75 80 L75 40 L80 45 L90 35 L70 20 L60 25 Q50 30 40 25 Z" stroke="#FF2060" stroke-width="1.5" fill="rgba(255,32,96,0.06)"/>
+        <text x="50" y="56" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="14" fill="#FF2060" letter-spacing="2">212</text>
+      </svg>`
+    },
+    {
+      id: 2, name: 'HOODIE EXPEDITION', cat: 'Vetement', price: 65,
+      desc: 'Coton lourd 320g. Broderie 212 poitrine.',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M30 18 Q20 22 10 32 L20 42 L26 36 L26 82 L74 82 L74 36 L80 42 L90 32 Q80 22 70 18 L62 24 Q50 30 38 24 Z" stroke="#FF2060" stroke-width="1.5" fill="rgba(255,32,96,0.06)"/>
+        <path d="M38 24 Q50 20 62 24 L64 18 Q50 14 36 18 Z" fill="rgba(255,32,96,0.12)"/>
+        <text x="50" y="58" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="10" fill="#FF2060" letter-spacing="2">212</text>
+      </svg>`
+    },
+    {
+      id: 3, name: 'CAP SUMMIT', cat: 'Accessoire', price: 28,
+      desc: 'Casquette 5 panneaux. Broderie relief. Ajustable.',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 55 Q20 30 50 28 Q80 30 80 55 Z" stroke="#FF2060" stroke-width="1.5" fill="rgba(255,32,96,0.06)"/>
+        <path d="M18 55 L82 55 Q82 60 50 62 Q18 60 18 55 Z" stroke="#FF2060" stroke-width="1" fill="rgba(255,32,96,0.1)"/>
+        <path d="M50 55 L30 75" stroke="#FF2060" stroke-width="1" opacity="0.4"/>
+        <text x="50" y="48" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="11" fill="#FF2060" letter-spacing="1">212</text>
+      </svg>`
+    },
+    {
+      id: 4, name: 'TOTE BAG TRACE', cat: 'Accessoire', price: 22,
+      desc: 'Coton canvas 400g. Impression recto. Anse longue.',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M35 30 Q35 22 50 22 Q65 22 65 30" stroke="#FF2060" stroke-width="1.5" fill="none"/>
+        <rect x="22" y="30" width="56" height="52" rx="2" stroke="#FF2060" stroke-width="1.5" fill="rgba(255,32,96,0.06)"/>
+        <path d="M30 42 L70 42" stroke="#FF2060" stroke-width="0.8" opacity="0.3"/>
+        <text x="50" y="66" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="13" fill="#FF2060" letter-spacing="2">212</text>
+      </svg>`
+    },
+    {
+      id: 5, name: 'POSTER SOMMETS', cat: 'Edition', price: 18,
+      desc: 'Format A2. Impression risographie. Numerote.',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="15" width="56" height="70" stroke="#FF2060" stroke-width="1.5" fill="rgba(255,32,96,0.04)"/>
+        <path d="M28 62 L40 45 L50 52 L62 35 L72 62 Z" stroke="#FF2060" stroke-width="1" fill="rgba(255,32,96,0.12)"/>
+        <text x="50" y="80" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="9" fill="#FF2060" letter-spacing="2">212</text>
+        <line x1="28" y1="70" x2="72" y2="70" stroke="#FF2060" stroke-width="0.5" opacity="0.4"/>
+      </svg>`
+    },
+    {
+      id: 6, name: 'PACK EXPEDITION', cat: 'Bundle', price: 95,
+      desc: 'T-shirt + Hoodie + Cap. Edition fondateur. -15%.',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="15" y="25" width="40" height="55" rx="1" stroke="#FF2060" stroke-width="1.2" fill="rgba(255,32,96,0.05)" transform="rotate(-5 35 52)"/>
+        <rect x="25" y="20" width="40" height="55" rx="1" stroke="#FF2060" stroke-width="1.2" fill="rgba(255,32,96,0.07)" transform="rotate(3 45 47)"/>
+        <rect x="30" y="22" width="40" height="55" rx="1" stroke="#FF2060" stroke-width="1.5" fill="rgba(255,32,96,0.12)"/>
+        <text x="50" y="55" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="11" fill="#FF2060" letter-spacing="1">PACK</text>
+        <text x="50" y="68" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="9" fill="#FF2060" letter-spacing="2" opacity="0.7">212</text>
+      </svg>`
+    }
+  ];
+
+  // ===== CART STATE =====
+  let cart = [];
+
+  function renderProducts() {
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = products.map(p => `
+      <div class="product-card">
+        <div class="product-visual">
+          <div class="product-hover-bg"></div>
+          ${p.svg}
+        </div>
+        <div class="product-info">
+          <div class="product-cat">${p.cat}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-desc">${p.desc}</div>
+          <div class="product-footer">
+            <span class="product-price">${p.price} EUR</span>
+            <button class="add-to-cart" id="btn-${p.id}" onclick="addToCart(${p.id})">+ Ajouter</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    const existing = cart.find(i => i.id === id);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ ...product, qty: 1 });
+    }
+
+    const btn = document.getElementById(`btn-${id}`);
+    btn.textContent = 'Ajoute !';
+    btn.classList.add('added');
+    setTimeout(() => {
+      btn.textContent = '+ Ajouter';
+      btn.classList.remove('added');
+    }, 1200);
+
+    updateCart();
+    openCart();
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(i => i.id !== id);
+    updateCart();
+  }
+
+  function updateQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) { removeFromCart(id); return; }
+    updateCart();
+  }
+
+  function updateCart() {
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+
+    document.getElementById('navCartCount').textContent = count;
+    document.getElementById('cartTotal').textContent = total.toFixed(2);
+
+    const countEl = document.getElementById('cartHeadCount');
+    countEl.textContent = count > 0 ? `(${count})` : '';
+
+    const empty = document.getElementById('cartEmpty');
+    const itemsEl = document.getElementById('cartItems');
+
+    if (cart.length === 0) {
+      empty.style.display = 'flex';
+      itemsEl.innerHTML = '';
+    } else {
+      empty.style.display = 'none';
+      itemsEl.innerHTML = cart.map(item => `
+        <div class="cart-item" id="cart-item-${item.id}">
+          <div class="cart-item-img">${item.svg}</div>
+          <div class="cart-item-info">
+            <div class="cart-item-cat">${item.cat}</div>
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-controls">
+              <button class="qty-btn" onclick="updateQty(${item.id}, -1)">-</button>
+              <span class="qty-num">${item.qty}</span>
+              <button class="qty-btn" onclick="updateQty(${item.id}, 1)">+</button>
+            </div>
+          </div>
+          <div>
+            <div class="cart-item-price">${(item.price * item.qty).toFixed(0)} EUR</div>
+            <button class="cart-item-remove" onclick="removeFromCart(${item.id})">Retirer</button>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function openCart() {
+    document.getElementById('cartOverlay').classList.add('open');
+    document.getElementById('cartPanel').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCart() {
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.getElementById('cartPanel').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ===== PROGRESS BAR =====
+  function animateProgress() {
+    const target = 38;
+    let current = 0;
+    const fill = document.getElementById('progressFill');
+    const pct = document.getElementById('progPct');
+    const step = () => {
+      if (current < target) {
+        current += 0.5;
+        fill.style.width = current + '%';
+        pct.textContent = Math.round(current) + '%';
+        requestAnimationFrame(step);
+      }
+    };
+    step();
+  }
+
+  // ===== INTERSECTION OBSERVER =====
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && e.target.id === 'projet') {
+        animateProgress();
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  observer.observe(document.getElementById('projet'));
+  
+
+  // ===== INIT =====
+  renderProducts();
+  updateCart();
+</script>
+</body>
+</html>
